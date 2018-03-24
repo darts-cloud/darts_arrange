@@ -1,8 +1,6 @@
 // [todo] 
 // [b] 3本のダーツを使用すること。
 // [b] ボードにハイパーリンクを設定。
-// [b] ボードに数字を表示。
-// [b] ソース管理
 // [c] ファットブル、セパブル設定の追加
 // [c] シングル、ダブル、トリプルアウト設定の追加
 
@@ -198,10 +196,6 @@ function displayPointForBull(point, hitNumber) {
 	$("#DB").text(getDisplayText("DB", hit_zanpoint));
 	$("#DB").css({backgroundColor: color});
 	$('canvas').getLayer("DB").fillStyle = getColor(hit_zanpoint);
-
-//	hit_zanpoint = calc(point, i * 3, HIT_AREA_TRIPLE);
-//	$("#" + hitNumber).text(hit_zanpoint);
-//	$('canvas').getLayer(i + "T").fillStyle = getColor(hit_zanpoint);
 }
 
 function getDisplayText(hitNumber, hit_zanpoint) {

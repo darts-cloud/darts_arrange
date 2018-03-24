@@ -1,9 +1,7 @@
 var DEFINE_STROKE_STYLE = 'black';
 var DEFINE_STROKE_WIDTH = 2;
-var DEFINE_CENTER_X = 160;
-var DEFINE_CENTER_Y = 160;
-// test
-var test = "";
+var DEFINE_CENTER_X = 180;
+var DEFINE_CENTER_Y = 180;
 var NUMBER_MAP = {
 	1 : "20",
 	2 : "1",
@@ -67,6 +65,27 @@ function drawSlice(num, numberName) {
 
 	// ダブル描画
 	drawDouble(multipleColor, baseAngles, numberName);
+
+	drawText("20", 180, 15);
+	drawText("1" , 230, 25);
+	drawText("18", 280, 50);
+	drawText("4" , 315, 85);
+	drawText("13", 340, 130);
+	drawText("6" , 345, 180);
+	drawText("10", 340, 230);
+	drawText("15", 315, 275);
+	drawText("2" , 280, 310);
+	drawText("17", 230, 335);
+	drawText("3" , 180, 343);
+	drawText("19", 130, 335);
+	drawText("7" ,  80, 310);
+	drawText("16",  40, 275);
+	drawText("8" ,  20, 230);
+	drawText("11",  15, 180);
+	drawText("14",  20, 130);
+	drawText("9" ,  40, 85);
+	drawText("12",  80, 50);
+	drawText("5" , 130, 25);
 }
 
 /**
@@ -176,4 +195,17 @@ function drawBull() {
 		x: DEFINE_CENTER_X, y: DEFINE_CENTER_Y,
 		radius: 6
 	});
+}
+
+function drawText(text, x, y) {
+	$('canvas').drawText({
+		name: text + "char",
+		layer: true,
+		fillStyle: 'black',
+		fontStyle: 'bold',
+		fontSize: '10pt',
+		text: text,
+		x: x, y: y,
+		maxWidth: 300
+	  });
 }
