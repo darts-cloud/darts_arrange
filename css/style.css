@@ -1,0 +1,44 @@
+#arrange_table {
+	text-align : center;
+}
+#arrange_table td {
+	width : 10em;
+	line-height: 2em;
+	height : 2em; 
+}
+#arrange_table th {
+	width : 3em;
+	line-height: 2em;
+	height : 2em; 
+	color:white;
+	background-color:#6666FF;
+}
+/*
+div#canvas {
+	position: relative;
+	width :500px;
+	height:400px;
+}
+
+canvas#cricket {
+	background-color:gray;
+	top:0px;
+	left:0px;
+	position: absolute;
+	z-index:1;
+}
+
+canvas.target { 
+	z-index: 99;
+	position: absolute;
+	background-color:red;
+}
+#log {
+	width :500px;
+	height:80px;
+	overflow-x: scroll;
+	background-color:#333333;
+	font-size:0.5em;
+	color:white;
+}
+*/

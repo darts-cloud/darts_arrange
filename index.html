@@ -1,0 +1,45 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+	"http://www.w3.org/TR/html4/loose.dtd">
+<html>
+	<head>
+		<title>文書のタイトル</title>
+		<link rel="stylesheet" href="css/style.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script type="text/javascript" src="script/util.js"></script>
+		<script type="text/javascript" src="script/jcanvas.min.js"></script>
+		<script type="text/javascript" src="script/canvas.js"></script>
+		<script type="text/javascript" src="script/define_class.js"></script>
+		<script type="text/javascript" src="script/darts.js"></script>
+		<script>
+		  var img = new Image();    //画像オブジェクト作成
+		  img.src = "./board_Fotor.jpg";  //写真のパスを指定する
+		</script>
+	</head>
+	<body>
+		<h3>01 セパブルダブルアウト - アレンジ表</h3>
+		<div>残点数</div>
+		<div id="point">aiueo</div>
+		<div id="canvas">
+			<canvas id="cricket" width="320" height="320"></canvas>
+		</div>
+		<div style="font-size:0.5em">
+			<table border="1" id="arrange_table">
+				<tr>
+					<th>Number</th>
+					<th>Single</th>
+					<th>Double</th>
+					<th>Triple</th>
+					<th>Number</th>
+					<th>Single</th>
+					<th>Double</th>
+					<th>Triple</th>
+				</tr>
+			</table>
+		</div>
+		<br/>
+		<div style="font-size:0.5em">
+			<span>残点数リンク</span>
+			<a href="index.html?point=20">20</a>
+		</div>
+	</body>
+</html>
