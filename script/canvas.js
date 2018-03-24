@@ -1,7 +1,7 @@
 var DEFINE_STROKE_STYLE = 'black';
 var DEFINE_STROKE_WIDTH = 2;
 var DEFINE_CENTER_X = 160;
-var DEFINE_CENTER_Y = 160;
+var DEFINE_CENTER_Y = 160;//
 var NUMBER_MAP = {
 	1 : "20",
 	2 : "1",
