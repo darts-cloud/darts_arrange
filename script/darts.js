@@ -1,11 +1,18 @@
 // [todo] 
 // [b] ボードにハイパーリンクを設定。
-// [c] ファットブル、セパブル設定の追加
 // [c] シングル、ダブル、トリプルアウト設定の追加
 
 // =====================================
 // アレンジ計算
 // =====================================
+// 設定
+var masterOutFlag = false;
+var doubleOutFlag = true;
+var singleOutFlag = false;
+var fatBullFlag = true;
+// 変数
+var singleBullPoint = 50;
+var doubleBullPoint = 50;
 // 定数
 var HIT_AREA_SINGLE = 1;
 var HIT_AREA_DOUBLE = 2;
@@ -20,6 +27,7 @@ var COLOR_ARRANGE_EVEN = "yellow";
 var COLOR_ARRANGE_ODD = "lightpink";
 var COLOR_ARRANGE_3 = "white";
 var COLOR_NONE = "lightgrey";
+// マップ
 var ARRANGE_MAP = [32, 40, 16, 8, 50, 38, 24, 36, 28, 22, 20, 12, 10, 6, 4, 2, 34, 30, 26, 18, 14];
 
 /** 
@@ -34,13 +42,15 @@ $( function() {
 	// URL文字列取得
 	var param = getUrlVars();
 	$("#point").text(param.point);
-
+	if (!fatBullFlag) {
+		singleBullPoint = 25;
+	}
     for (var i = 1; i <= 20; i++) {
 		// アレンジ表、ボード表示
 		displayPoint(param.point, i);
 	}
 	// アレンジ表、ボード表示（ブル）
-	displayPointForBull(param.point, 25);
+	displayPointForBull(param.point, singleBullPoint);
 	// 再描画
 	$('canvas').drawLayers();
 });
@@ -161,15 +171,21 @@ function displayPointForBull(zanPoint, hitNumber) {
 	$("#" + displayNumber).text(getDisplayText(arr));
 	$("#" + displayNumber).css({backgroundColor: color});
 	$('canvas').getLayer(displayNumber).fillStyle = getColor(arr);
-
-	// ダブルブルヒット時の計算
-	arr = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
-	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_DOUBLE);
-	arr.unshift(displayNumber);
-	color = getColor(arr);
-	$("#" + displayNumber).text(getDisplayText(arr));
-	$("#" + displayNumber).css({backgroundColor: color});
-	$('canvas').getLayer(displayNumber).fillStyle = getColor(arr);
+	if (fatBullFlag) {
+		displayNumber = "DB";
+		$("#" + displayNumber).text(getDisplayText(arr));
+		$("#" + displayNumber).css({backgroundColor: color});
+		$('canvas').getLayer(displayNumber).fillStyle = getColor(arr);
+	} else {
+		// ダブルブルヒット時の計算
+		arr = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
+		displayNumber = getDisplayNumber(hitNumber, HIT_AREA_DOUBLE);
+		arr.unshift(displayNumber);
+		color = getColor(arr);
+		$("#" + displayNumber).text(getDisplayText(arr));
+		$("#" + displayNumber).css({backgroundColor: color});
+		$('canvas').getLayer(displayNumber).fillStyle = getColor(arr);
+	}
 }
 
 /**
@@ -181,9 +197,7 @@ function displayPointForBull(zanPoint, hitNumber) {
 function calc(zanPoint, hitPoint, hitArea) {
 	// ヒットした後の残点数を計算
 	var zan = zanPoint - hitPoint;
-	var masterOutFlag = false;
-	var doubleOutFlag = true;
-	var singleOutFlag = false;
+
 	// ==============================
 	// バースト
 	// ==============================
@@ -202,8 +216,13 @@ function calc(zanPoint, hitPoint, hitArea) {
 		if (masterOutFlag && hitArea == HIT_AREA_TRIPLE) {
 			return [OUT];
 		}
-		if (doubleOutFlag && hitArea == HIT_AREA_DOUBLE) {
-			return [OUT];
+		if (doubleOutFlag) {
+			if (fatBullFlag && hitPoint == 50) {
+				return [OUT];
+			}
+			if (hitArea == HIT_AREA_DOUBLE) {
+				return [OUT];
+			}
 		}
 		if (singleOutFlag && hitArea == HIT_AREA_SINGLE) {
 			return [OUT];
@@ -226,18 +245,18 @@ function calc(zanPoint, hitPoint, hitArea) {
 	}
 	if (doubleOutFlag && zan % 2 == 0) {
 		amari = zan / 2;
-//		if (amari == 25) {
-//			// todo:セパブル、ファットブルの考慮
-//			return [getDisplayNumber(amari, HIT_AREA_DOUBLE)];
-//		}
+		if (fatBullFlag && amari == 25) {
+			// ファットブルの場合
+			return [getDisplayNumber(50, HIT_AREA_DOUBLE)];
+		}
 		if (amari <= 20 || amari == 25) {
 			return [getDisplayNumber(amari, HIT_AREA_DOUBLE)];
 		}
 	}
 	if (singleOutFlag) {
 		amari = zan;
-		if (amari == 25) {
-			// todo:セパブル、ファットブルの考慮
+		if (!fatBullFlag && amari == 25) {
+			// セパブルの場合
 			return [getDisplayNumber(amari, HIT_AREA_SINGLE)];
 		}
 		if (amari <= 20 || amari == 50) {
@@ -301,7 +320,10 @@ function getDisplayText(arr) {
  */
 function isEvenNumber(hit_zanpoint) {
 	if (hit_zanpoint == "SB" || hit_zanpoint == "DB") {
-		// DBは偶数だが、難しいため、奇数と判定。
+		if (fatBullFlag) {
+			return true;
+		}
+		// セパブルの場合、DBは偶数だが、難しいため、奇数と判定。
 		return false;
 	}
 	var point = hit_zanpoint.replace("D", "");
@@ -336,7 +358,11 @@ function darts3Arrange(zan, numbers, hitArea) {
 		if (hitArea == HIT_AREA_TRIPLE) {
 			darts2point = darts2point / 3;
 		}
-		darts3point = arrVal / 2;
+		if (fatBullFlag && arrVal == 50) {
+			darts3point = arrVal;
+		} else {
+			darts3point = arrVal / 2;
+		}
 		darts2point = getDisplayNumber(darts2point, hitArea);
 		darts3point = getDisplayNumber(darts3point, HIT_AREA_DOUBLE);
 		return [darts2point, darts3point];
@@ -353,8 +379,10 @@ function createArrangeMap(hitArea) {
 		for (var i = 1; i<=20; i++) {
 			arr.push(i);
 		}
-		arr.push(25);
-		// ファットブルの考慮
+		if (!fatBullFlag) {
+			arr.push(25);
+		}
+		arr.push(50);
 	}
 	if (hitArea == HIT_AREA_DOUBLE) {
 		for (var i = 1; i<=20; i++) {
@@ -377,16 +405,19 @@ function createArrangeMap(hitArea) {
  */
 function getDisplayNumber(hitNumber, hitArea) {
 	if (hitArea == HIT_AREA_SINGLE) {
-			if (hitNumber == 25) {
-				return "SB";
-			}
-			if (hitNumber == 50) {
+		if (hitNumber == singleBullPoint) {
+			return "SB";
+		}
+		if (hitNumber == doubleBullPoint) {
 			return "DB";
 		}
 		return hitNumber + "S";
 	}
 	if (hitArea == HIT_AREA_DOUBLE) {
-		if (hitNumber == 25) {
+		if (fatBullFlag && hitNumber == 50) {
+			return "SB";
+		}
+		if (!fatBullFlag && hitNumber == 25) {
 			return "DB";
 		}
 		return hitNumber + "D";
