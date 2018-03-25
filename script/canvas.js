@@ -84,7 +84,7 @@ function drawSlice(num, numberName) {
 	drawText("11",  15, 180);
 	drawText("14",  20, 130);
 	drawText("9" ,  40, 85);
-	drawText("12",  80, 50);　
+	drawText("12",  80, 50);
 	drawText("5" , 130, 25);
 }
 

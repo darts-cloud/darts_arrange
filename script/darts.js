@@ -20,7 +20,7 @@ var COLOR_ARRANGE_EVEN = "yellow";
 var COLOR_ARRANGE_ODD = "lightpink";
 var COLOR_NONE = "white";
 
-/**
+/** 
  * 初期処理
  */
 $( function() {
@@ -82,7 +82,7 @@ function createArrangeTable() {
 }
 
 /**
- * カラー取得
+ * カラー取得S
  * @param {取得点数} hit_zanpoint 
  */
 function getColor(hit_zanpoint) {
