@@ -29,12 +29,15 @@ $( function() {
 	// アレンジ表作成
 	createArrangeTable();
 
+	// URL文字列取得
 	var param = getUrlVars();
 	$("#point").text(param.point);
 
     for (var i = 1; i <= 20; i++) {
+		// アレンジ表、ボード表示
 		displayPoint(param.point, i);
 	}
+	// アレンジ表、ボード表示（ブル）
 	displayPointForBull(param.point, 25);
 	// 再描画
 	$('canvas').drawLayers();
@@ -102,7 +105,7 @@ function getColor(hit_zanpoint) {
 }
 
 /**
- * 表示点数文字列取得
+ * 点数表示
  * @param {残点数} zanPoint 
  * @param {HitNumber} hitNumber 
  */
@@ -131,7 +134,7 @@ function displayPoint(zanPoint, hitNumber) {
 }
 
 /**
- * 表示点数文字列取得(bull)
+ * 点数表示(bull)
  * @param {残点数} zanPoint 
  * @param {*} hitNumber 
  */
@@ -158,6 +161,7 @@ function displayPointForBull(zanPoint, hitNumber) {
  * @param {シングル/ダブル/トリプル} hitArea 
  */
 function calc(zanPoint, hitPoint, hitArea) {
+	// ヒットした後の残点数を計算
 	var zan = zanPoint - hitPoint;
 	var masterOutFlag = false;
 	var doubleOutFlag = true;
@@ -226,6 +230,11 @@ function calc(zanPoint, hitPoint, hitArea) {
 	return "";
 }
 
+/**
+ * アレンジ表 表示文字列
+ * @param {ヒットナンバー} hitNumber 
+ * @param {ヒット後の残ポイント} hit_zanpoint 
+ */
 function getDisplayText(hitNumber, hit_zanpoint) {
 	if (hit_zanpoint == OUT || hit_zanpoint == BURST || hit_zanpoint == "") {
 		return hit_zanpoint;
@@ -233,6 +242,10 @@ function getDisplayText(hitNumber, hit_zanpoint) {
 	return hitNumber + " → " + hit_zanpoint;
 }
 
+/**
+ * 偶数判定
+ * @param {ヒット後の残ポイント} hit_zanpoint 
+ */
 function isEvenNumber(hit_zanpoint) {
 	if (hit_zanpoint == "SB" || hit_zanpoint == "DB") {
 		// DBは偶数だが、難しいため、奇数と判定。
