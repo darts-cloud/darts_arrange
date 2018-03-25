@@ -1,5 +1,4 @@
 // [todo] 
-// [b] 3本のダーツを使用すること。
 // [b] ボードにハイパーリンクを設定。
 // [c] ファットブル、セパブル設定の追加
 // [c] シングル、ダブル、トリプルアウト設定の追加
@@ -13,12 +12,15 @@ var HIT_AREA_DOUBLE = 2;
 var HIT_AREA_TRIPLE = 3;
 var BURST = "BURST";
 var OUT = "OUT!!";
+var NO_OUT = "NO OUT";
 // 定数 - 色
 var COLOR_BURST = "gray";
 var COLOR_OUT = "palegreen";
 var COLOR_ARRANGE_EVEN = "yellow";
 var COLOR_ARRANGE_ODD = "lightpink";
-var COLOR_NONE = "white";
+var COLOR_ARRANGE_3 = "white";
+var COLOR_NONE = "lightgrey";
+var ARRANGE_MAP = [32, 40, 16, 8, 50, 38, 24, 36, 28, 22, 20, 12, 10, 6, 4, 2, 34, 30, 26, 18, 14];
 
 /** 
  * 初期処理
@@ -83,17 +85,20 @@ function createArrangeTable() {
 
 /**
  * カラー取得S
- * @param {取得点数} hit_zanpoint 
+ * @param {取得点数} arr 
  */
-function getColor(hit_zanpoint) {
-	if (hit_zanpoint == BURST) {
+function getColor(arr) {
+	if (arr[1] == BURST) {
 		return COLOR_BURST;
 	}
-	if (hit_zanpoint == OUT){
+	if (arr[1] == OUT){
 		return COLOR_OUT;
 	}
-	if (hit_zanpoint != ""){
-		if (isEvenNumber(hit_zanpoint)) {
+	if (arr[1] == NO_OUT) {
+		return COLOR_NONE;
+	}
+	if (arr.length == 2){
+		if (isEvenNumber(arr[1])) {
 			// 偶数
 			return COLOR_ARRANGE_EVEN;
 		} else {
@@ -101,7 +106,10 @@ function getColor(hit_zanpoint) {
 			return COLOR_ARRANGE_ODD;
 		}
 	}
-	return COLOR_NONE;
+	if (arr.length == 3) {
+		return COLOR_ARRANGE_3;
+	}
+	return "";
 }
 
 /**
@@ -111,26 +119,32 @@ function getColor(hit_zanpoint) {
  */
 function displayPoint(zanPoint, hitNumber) {
 	// シングルヒット時の計算
-	var hit_zanpoint = calc(zanPoint, hitNumber * 1, HIT_AREA_SINGLE);
-	var color = getColor(hit_zanpoint);
-	$("#" + hitNumber + "S").text(getDisplayText(hitNumber + "S", hit_zanpoint));
-	$("#" + hitNumber + "S").css({backgroundColor: color});
+	var arr = calc(zanPoint, hitNumber * 1, HIT_AREA_SINGLE);
+	var displayNumber = getDisplayNumber(hitNumber, HIT_AREA_SINGLE);
+	arr.unshift(displayNumber);
+	var color = getColor(arr);
+	$("#" + displayNumber).text(getDisplayText(arr));
+	$("#" + displayNumber).css({backgroundColor: color});
 	$('canvas').getLayer(hitNumber + "IS").fillStyle = color;
 	$('canvas').getLayer(hitNumber + "OS").fillStyle = color;
 
 	// ダブルヒット時の計算
-	hit_zanpoint = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
-	color = getColor(hit_zanpoint);
-	$("#" + hitNumber + "D").text(getDisplayText(hitNumber + "D", hit_zanpoint));
-	$("#" + hitNumber + "D").css({backgroundColor: color});
-	$('canvas').getLayer(hitNumber + "D").fillStyle = color;
+	arr = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
+	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_DOUBLE);
+	arr.unshift(displayNumber);
+	color = getColor(arr);
+	$("#" + displayNumber).text(getDisplayText(arr));
+	$("#" + displayNumber).css({backgroundColor: color});
+	$('canvas').getLayer(displayNumber).fillStyle = color;
 
 	// トリプル計算時の計算
-	hit_zanpoint = calc(zanPoint, hitNumber * 3, HIT_AREA_TRIPLE);
-	color = getColor(hit_zanpoint);
-	$("#" + hitNumber + "T").text(getDisplayText(hitNumber + "T", hit_zanpoint));
-	$("#" + hitNumber + "T").css({backgroundColor: color});
-	$('canvas').getLayer(hitNumber + "T").fillStyle = color;
+	arr = calc(zanPoint, hitNumber * 3, HIT_AREA_TRIPLE);
+	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_TRIPLE);
+	arr.unshift(displayNumber);
+	color = getColor(arr);
+	$("#" + displayNumber).text(getDisplayText(arr));
+	$("#" + displayNumber).css({backgroundColor: color});
+	$('canvas').getLayer(displayNumber).fillStyle = color;
 }
 
 /**
@@ -140,18 +154,22 @@ function displayPoint(zanPoint, hitNumber) {
  */
 function displayPointForBull(zanPoint, hitNumber) {
 	// シングルブル時の計算
-	var hit_zanpoint = calc(zanPoint, hitNumber * 1, HIT_AREA_SINGLE);
-	var color = getColor(hit_zanpoint);
-	$("#SB").text(getDisplayText("SB", hit_zanpoint));
-	$("#SB").css({backgroundColor: color});
-	$('canvas').getLayer("SB").fillStyle = getColor(hit_zanpoint);
+	var arr = calc(zanPoint, hitNumber * 1, HIT_AREA_SINGLE);
+	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_SINGLE);
+	arr.unshift(displayNumber);
+	var color = getColor(arr);
+	$("#" + displayNumber).text(getDisplayText(arr));
+	$("#" + displayNumber).css({backgroundColor: color});
+	$('canvas').getLayer(displayNumber).fillStyle = getColor(arr);
 
 	// ダブルブルヒット時の計算
-	hit_zanpoint = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
-	color = getColor(hit_zanpoint);
-	$("#DB").text(getDisplayText("DB", hit_zanpoint));
-	$("#DB").css({backgroundColor: color});
-	$('canvas').getLayer("DB").fillStyle = getColor(hit_zanpoint);
+	arr = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
+	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_DOUBLE);
+	arr.unshift(displayNumber);
+	color = getColor(arr);
+	$("#" + displayNumber).text(getDisplayText(arr));
+	$("#" + displayNumber).css({backgroundColor: color});
+	$('canvas').getLayer(displayNumber).fillStyle = getColor(arr);
 }
 
 /**
@@ -170,32 +188,32 @@ function calc(zanPoint, hitPoint, hitArea) {
 	// バースト
 	// ==============================
 	if (zan < 0) {
-		return BURST;
+		return [BURST];
 	}
 	if (zan == 1 && !singleOutFlag) {
 		// シングルアウト出来ない場合は、1以下はバースト
-		return BURST;
+		return [BURST];
 	}
 
 	// ==============================
-	// アウト
+	// アウト(1本)
 	// ==============================
 	if ( zan == 0 ) {
 		if (masterOutFlag && hitArea == HIT_AREA_TRIPLE) {
-			return OUT;
+			return [OUT];
 		}
 		if (doubleOutFlag && hitArea == HIT_AREA_DOUBLE) {
-			return OUT;
+			return [OUT];
 		}
 		if (singleOutFlag && hitArea == HIT_AREA_SINGLE) {
-			return OUT;
+			return [OUT];
 		}
 		// バースト
-		return BURST;
+		return [BURST];
 	}
 	
 	// ==============================
-	// アレンジ
+	// アレンジ(2本アウト)
 	// 【考え方】
 	// 次のラウンドで少ない本数でアウトできる上がり目を優先
 	// ==============================
@@ -203,31 +221,60 @@ function calc(zanPoint, hitPoint, hitArea) {
 	if (masterOutFlag && zan % 3 == 0) {
 		amari = zan / 3;
 		if (amari <= 20) {
-			return amari + "T";
+			return [getDisplayNumber(amari, HIT_AREA_TRIPLE)];
 		}
 	}
 	if (doubleOutFlag && zan % 2 == 0) {
 		amari = zan / 2;
-		if (amari == 25) {
-			// todo:セパブル、ファットブルの考慮
-			// todo:MasterOutの考慮
-			return "DB";
-		}
-		if (amari <= 20) {
-			return amari + "D";
+//		if (amari == 25) {
+//			// todo:セパブル、ファットブルの考慮
+//			return [getDisplayNumber(amari, HIT_AREA_DOUBLE)];
+//		}
+		if (amari <= 20 || amari == 25) {
+			return [getDisplayNumber(amari, HIT_AREA_DOUBLE)];
 		}
 	}
 	if (singleOutFlag) {
 		amari = zan;
-		if (amari == 25 || amari == 50) {
+		if (amari == 25) {
 			// todo:セパブル、ファットブルの考慮
-			return "SB";
+			return [getDisplayNumber(amari, HIT_AREA_SINGLE)];
 		}
-		if (amari <= 20) {
-			return amari + "S";
+		if (amari <= 20 || amari == 50) {
+			return [getDisplayNumber(amari, HIT_AREA_SINGLE)];
 		}
 	}
-	return "";
+	// ==============================
+	// アレンジ(3本アウト)
+	// 【考え方】
+	// 次のラウンドで少ない本数でアウトできる上がり目を優先
+	// ==============================
+	if (masterOutFlag) {
+		// todo
+	}
+	if (doubleOutFlag) {
+		// 2本目シングルアウト精査
+		var map = createArrangeMap(HIT_AREA_SINGLE);
+		var arr = darts3Arrange(zan, map, HIT_AREA_SINGLE);
+		if (arr != null) {
+			return arr;
+		}
+		map = createArrangeMap(HIT_AREA_DOUBLE);
+		arr = darts3Arrange(zan, map, HIT_AREA_DOUBLE);
+		if (arr != null) {
+			return arr;
+		}
+		map = createArrangeMap(HIT_AREA_TRIPLE);
+		arr = darts3Arrange(zan, map, HIT_AREA_TRIPLE);
+		if (arr != null) {
+			return arr;
+		}
+	}
+	if (singleOutFlag) {
+		// todo
+	}
+
+	return [NO_OUT];
 }
 
 /**
@@ -235,11 +282,17 @@ function calc(zanPoint, hitPoint, hitArea) {
  * @param {ヒットナンバー} hitNumber 
  * @param {ヒット後の残ポイント} hit_zanpoint 
  */
-function getDisplayText(hitNumber, hit_zanpoint) {
-	if (hit_zanpoint == OUT || hit_zanpoint == BURST || hit_zanpoint == "") {
-		return hit_zanpoint;
+function getDisplayText(arr) {
+	if (arr.length <= 1) {
+		return "";
 	}
-	return hitNumber + " → " + hit_zanpoint;
+	if (arr[1] == OUT || arr[1] == BURST || arr[1] == NO_OUT) {
+		return arr[1];
+	}
+	if (!Array.isArray(arr)) {
+		return arr;
+	}
+	return arr.join(" → ");
 }
 
 /**
@@ -260,4 +313,85 @@ function isEvenNumber(hit_zanpoint) {
 	}
 	// 偶数
 	return true;
+}
+
+/**
+ * ３本使用時のアレンジ計算
+ * @param {2本目数字配列} numbers 
+ */
+function darts3Arrange(zan, numbers, hitArea) {
+	var darts2point, darts3point;
+	for (var idx in ARRANGE_MAP) {
+		var arrVal = ARRANGE_MAP[idx];
+		if (zan < arrVal) {
+			continue;
+		}
+		darts2point = zan - arrVal;
+		if ($.inArray(darts2point, numbers) < 0) {
+			continue;
+		}
+		if (hitArea == HIT_AREA_DOUBLE) {
+			darts2point = darts2point / 2;
+		}
+		if (hitArea == HIT_AREA_TRIPLE) {
+			darts2point = darts2point / 3;
+		}
+		darts3point = arrVal / 2;
+		darts2point = getDisplayNumber(darts2point, hitArea);
+		darts3point = getDisplayNumber(darts3point, HIT_AREA_DOUBLE);
+		return [darts2point, darts3point];
+	}
+	return null;
+}
+/**
+ * アレンジマップ作成
+ * @param {*} hitArea 
+ */
+function createArrangeMap(hitArea) {
+	var arr = [];
+	if (hitArea == HIT_AREA_SINGLE) {
+		for (var i = 1; i<=20; i++) {
+			arr.push(i);
+		}
+		arr.push(25);
+		// ファットブルの考慮
+	}
+	if (hitArea == HIT_AREA_DOUBLE) {
+		for (var i = 1; i<=20; i++) {
+			arr.push(i*2);
+		}
+		arr.push(50);
+	}
+	if (hitArea == HIT_AREA_TRIPLE) {
+		for (var i = 1; i<=20; i++) {
+			arr.push(i*3);
+		}
+	}
+	return arr;
+}
+
+/**
+ * 表示用ナンバー取得
+ * @param {1} hitNumber 
+ * @param {*} hitArea 
+ */
+function getDisplayNumber(hitNumber, hitArea) {
+	if (hitArea == HIT_AREA_SINGLE) {
+			if (hitNumber == 25) {
+				return "SB";
+			}
+			if (hitNumber == 50) {
+			return "DB";
+		}
+		return hitNumber + "S";
+	}
+	if (hitArea == HIT_AREA_DOUBLE) {
+		if (hitNumber == 25) {
+			return "DB";
+		}
+		return hitNumber + "D";
+	}
+	if (hitArea == HIT_AREA_TRIPLE) {
+		return hitNumber + "T";
+	}
 }
