@@ -1,6 +1,5 @@
 // [todo] 
 // [b] ボードにハイパーリンクを設定。
-// [c] シングル、ダブル、トリプルアウト設定の追加
 
 // =====================================
 // アレンジ計算
@@ -41,7 +40,9 @@ $( function() {
 
 	// URL文字列取得
 	var param = getUrlVars();
-	$("#point").text(param.point);
+	// Pulldown作成
+	createPulldown(param.point);
+
 	if (!fatBullFlag) {
 		singleBullPoint = 25;
 	}
@@ -53,6 +54,8 @@ $( function() {
 	displayPointForBull(param.point, singleBullPoint);
 	// 再描画
 	$('canvas').drawLayers();
+
+	$("#point").change(onChangePoint);
 });
 
 /**
@@ -425,4 +428,22 @@ function getDisplayNumber(hitNumber, hitArea) {
 	if (hitArea == HIT_AREA_TRIPLE) {
 		return hitNumber + "T";
 	}
+}
+
+function createPulldown(point) {
+	
+    var $select = $('#point');
+
+	for (var i = 1; i <= 180; i++) {
+		var $option = $('<option>')
+        .val(i)
+        .text(i)
+        .prop('selected', point == i);
+	    $select.append($option);
+	}
+
+}
+
+function onChangePoint() {
+	window.location.href = getUrl() + "?point=" + $(this).val();
 }

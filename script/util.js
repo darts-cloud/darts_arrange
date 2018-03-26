@@ -20,3 +20,13 @@ var getUrlVars = function(){
     } 
     return vars; 
 }
+
+/**
+ *  GETパラメータを配列にして返す
+ *  
+ *  @return     パラメータのObject
+ *
+ */
+var getUrl = function(){
+    return location.protocol + "//" + location.hostname + location.pathname;
+}
