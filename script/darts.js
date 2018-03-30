@@ -9,6 +9,7 @@ var masterOutFlag = false;
 var doubleOutFlag = true;
 var singleOutFlag = false;
 var fatBullFlag = true;
+var displayThrowDarts = false;
 // 変数
 var singleBullPoint = 50;
 var doubleBullPoint = 50;
@@ -56,6 +57,23 @@ $( function() {
 	$('canvas').drawLayers();
 
 	$("#point").change(onChangePoint);
+
+	var title = "01 ";
+	if (fatBullFlag) {
+		title = title + "ファットブル";
+	} else {
+		title = title + "セパブル";
+	}
+	if (singleOutFlag) {
+		title = title + "シングルアウト";
+	} else if (doubleOutFlag) {
+		title = title + "ダブルアウト";
+	} else if (masterOutFlag) {
+		title = title + "マスターアウト";
+	}
+	title = title + " - アレンジ表";
+	$("#title").text(title);
+
 });
 
 /**
@@ -101,17 +119,29 @@ function createArrangeTable() {
  * @param {取得点数} arr 
  */
 function getColor(arr) {
-	if (arr[1] == BURST) {
+	var arrange2honIdx;
+	var arrange2hon;
+	var arrange3hon;
+	if (displayThrowDarts) {
+		arrange2hon = 2;
+		arrange3hon = 3;
+		arrange2honIdx = 1;
+	} else {
+		arrange2hon = 1;
+		arrange3hon = 2;
+		arrange2honIdx = 0;
+	}
+	if (arr[arrange2honIdx] == BURST) {
 		return COLOR_BURST;
 	}
-	if (arr[1] == OUT){
+	if (arr[arrange2honIdx] == OUT){
 		return COLOR_OUT;
 	}
-	if (arr[1] == NO_OUT) {
+	if (arr[arrange2honIdx] == NO_OUT) {
 		return COLOR_NONE;
 	}
-	if (arr.length == 2){
-		if (isEvenNumber(arr[1])) {
+	if (arr.length == arrange2hon){
+		if (isEvenNumber(arr[arrange2honIdx])) {
 			// 偶数
 			return COLOR_ARRANGE_EVEN;
 		} else {
@@ -119,7 +149,7 @@ function getColor(arr) {
 			return COLOR_ARRANGE_ODD;
 		}
 	}
-	if (arr.length == 3) {
+	if (arr.length == arrange3hon) {
 		return COLOR_ARRANGE_3;
 	}
 	return "";
@@ -134,7 +164,9 @@ function displayPoint(zanPoint, hitNumber) {
 	// シングルヒット時の計算
 	var arr = calc(zanPoint, hitNumber * 1, HIT_AREA_SINGLE);
 	var displayNumber = getDisplayNumber(hitNumber, HIT_AREA_SINGLE);
-	arr.unshift(displayNumber);
+	if (displayThrowDarts) {
+		arr.unshift(displayNumber);
+	}
 	var color = getColor(arr);
 	$("#" + displayNumber).text(getDisplayText(arr));
 	$("#" + displayNumber).css({backgroundColor: color});
@@ -144,7 +176,9 @@ function displayPoint(zanPoint, hitNumber) {
 	// ダブルヒット時の計算
 	arr = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
 	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_DOUBLE);
-	arr.unshift(displayNumber);
+	if (displayThrowDarts) {
+		arr.unshift(displayNumber);
+	}
 	color = getColor(arr);
 	$("#" + displayNumber).text(getDisplayText(arr));
 	$("#" + displayNumber).css({backgroundColor: color});
@@ -153,7 +187,9 @@ function displayPoint(zanPoint, hitNumber) {
 	// トリプル計算時の計算
 	arr = calc(zanPoint, hitNumber * 3, HIT_AREA_TRIPLE);
 	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_TRIPLE);
-	arr.unshift(displayNumber);
+	if (displayThrowDarts) {
+		arr.unshift(displayNumber);
+	}
 	color = getColor(arr);
 	$("#" + displayNumber).text(getDisplayText(arr));
 	$("#" + displayNumber).css({backgroundColor: color});
@@ -169,7 +205,9 @@ function displayPointForBull(zanPoint, hitNumber) {
 	// シングルブル時の計算
 	var arr = calc(zanPoint, hitNumber * 1, HIT_AREA_SINGLE);
 	displayNumber = getDisplayNumber(hitNumber, HIT_AREA_SINGLE);
-	arr.unshift(displayNumber);
+	if (displayThrowDarts) {
+		arr.unshift(displayNumber);
+	}
 	var color = getColor(arr);
 	$("#" + displayNumber).text(getDisplayText(arr));
 	$("#" + displayNumber).css({backgroundColor: color});
@@ -183,7 +221,9 @@ function displayPointForBull(zanPoint, hitNumber) {
 		// ダブルブルヒット時の計算
 		arr = calc(zanPoint, hitNumber * 2, HIT_AREA_DOUBLE);
 		displayNumber = getDisplayNumber(hitNumber, HIT_AREA_DOUBLE);
-		arr.unshift(displayNumber);
+		if (displayThrowDarts) {
+			arr.unshift(displayNumber);
+		}	
 		color = getColor(arr);
 		$("#" + displayNumber).text(getDisplayText(arr));
 		$("#" + displayNumber).css({backgroundColor: color});
@@ -305,16 +345,20 @@ function calc(zanPoint, hitPoint, hitArea) {
  * @param {ヒット後の残ポイント} hit_zanpoint 
  */
 function getDisplayText(arr) {
-	if (arr.length <= 1) {
+	var idx = 1;
+	if (!displayThrowDarts) {
+		idx = 0;
+	}
+	if (arr.length <= idx) {
 		return "";
 	}
-	if (arr[1] == OUT || arr[1] == BURST || arr[1] == NO_OUT) {
-		return arr[1];
+	if (arr[idx] == OUT || arr[idx] == BURST || arr[idx] == NO_OUT) {
+		return arr[idx];
 	}
 	if (!Array.isArray(arr)) {
 		return arr;
 	}
-	return arr.join(" → ");
+	return arr.join("→");
 }
 
 /**

@@ -10,23 +10,24 @@
 		<script type="text/javascript" src="script/canvas.js"></script>
 		<script type="text/javascript" src="script/define_class.js"></script>
 		<script type="text/javascript" src="script/darts.js"></script>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	</head>
 	<body>
-		<h3>01 セパブルダブルアウト - アレンジ表</h3>
+		<h3 id="title"></h3>
 		<div>残点数</div>
 		<select id="point"></select>
 		<div id="canvas">
 			<canvas id="cricket" width="350" height="350"></canvas>
 		</div>
 		<br/>
-		<div style="font-size:0.5em">
-			<table border="1" id="arrange_table" >
+		<div>
+			<table id="arrange_table" >
 				<tr>
-					<th>Number</th>
+					<th>No.</th>
 					<th>Single</th>
 					<th>Double</th>
 					<th>Triple</th>
-					<th>Number</th>
+					<th>No.</th>
 					<th>Single</th>
 					<th>Double</th>
 					<th>Triple</th>
@@ -34,9 +35,5 @@
 			</table>
 		</div>
 		<br/>
-		<div style="font-size:0.5em">
-			<span>残点数リンク</span>
-			<a href="index.html?point=20">20</a>
-		</div>
 	</body>
 </html>
