@@ -99,7 +99,7 @@ function drawSlice(num, numberName) {
  */
 function drawInnerSingle(color, baseAngles, numberName) {
 	$('canvas').drawSlice({
-		strokeStyle: 'blue',
+		strokeStyle: DEFINE_STROKE_STYLE,
 		strokeWidth: DEFINE_STROKE_WIDTH,
 		fillStyle: color,
 		name: numberName + "IS",
