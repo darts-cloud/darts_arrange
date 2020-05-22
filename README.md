@@ -2,4 +2,4 @@
 ダーツのアレンジ算出プログラムです。
 
 
-aaaa
+https://darts-cloud.github.io/darts_arrange/
