@@ -2,6 +2,12 @@ var DEFINE_STROKE_STYLE = 'black';
 var DEFINE_STROKE_WIDTH = 2;
 var DEFINE_CENTER_X = 180;
 var DEFINE_CENTER_Y = 180;
+var DEFINE_MULTI_COLOR_RED = 'red';
+var DEFINE_MULTI_COLOR_GREEN = 'green';
+var DEFINE_SINGLE_COLOR_WHITE = 'white';
+var DEFINE_SINGLE_COLOR_BLACK = 'black';
+var MULTI_COLOR = '';
+var SINGLE_COLOR = '';
 var NUMBER_MAP = {
 	1 : "20",
 	2 : "1",
@@ -36,35 +42,6 @@ function canvas_init() {
 
 	// ブル描画
 	drawBull();
-}
-
-/**
- * ナンバー描画
- */
-function drawSlice(num, numberName) {
-	var canvas = $('canvas');
-	var baseAngles = (num - 1) * 18;
-	var singleColor = "";
-	var multipleColor = "";
-	if (num % 2 == 1) {
-		singleColor="white";
-		multipleColor="white";
-	} else {
-		singleColor="white";
-		multipleColor="white";
-	}
-	
-	// インナーシングル描画
-	drawInnerSingle(singleColor, baseAngles, numberName);
-	
-	// アウターシングル描画
-	drawOuterSingle(singleColor, baseAngles, numberName);
-
-	// トリプル描画
-	drawTriple(multipleColor, baseAngles, numberName);
-
-	// ダブル描画
-	drawDouble(multipleColor, baseAngles, numberName);
 
 	drawText("20", 180, 15);
 	drawText("1" , 230, 25);
@@ -89,11 +66,40 @@ function drawSlice(num, numberName) {
 }
 
 /**
+ * ナンバー描画
+ */
+function drawSlice(num, numberName) {
+	var canvas = $('canvas');
+	var baseAngles = (num - 1) * 18;
+	var singleColor = "";
+	var multipleColor = "";
+	if (num % 2 == 1) {
+		singleColor = DEFINE_SINGLE_COLOR_BLACK;
+		multipleColor = DEFINE_MULTI_COLOR_RED;
+	} else {
+		singleColor = DEFINE_SINGLE_COLOR_WHITE;
+		multipleColor = DEFINE_MULTI_COLOR_GREEN;
+	}
+	
+	// インナーシングル描画
+	drawInnerSingle(singleColor, baseAngles, numberName);
+	
+	// アウターシングル描画
+	drawOuterSingle(singleColor, baseAngles, numberName);
+
+	// トリプル描画
+	drawTriple(multipleColor, baseAngles, numberName);
+
+	// ダブル描画
+	drawDouble(multipleColor, baseAngles, numberName);
+}
+
+/**
  * インナーシングル描画
  */
 function drawInnerSingle(color, baseAngles, numberName) {
 	$('canvas').drawSlice({
-		strokeStyle: DEFINE_STROKE_STYLE,
+		strokeStyle: 'blue',
 		strokeWidth: DEFINE_STROKE_WIDTH,
 		fillStyle: color,
 		name: numberName + "IS",
@@ -109,7 +115,7 @@ function drawInnerSingle(color, baseAngles, numberName) {
  * アウターシングル描画
  */
 function drawOuterSingle(color, baseAngles, numberName) {
-	var startX = DEFINE_CENTER_X + Math.sin((baseAngles-9) * Math.PI / 180) * 90;
+	var startX = DEFINE_CENTER_X + Math.sin((baseAngles-9) * Math.PI / 180) * 88;
 	var startY = DEFINE_CENTER_Y + Math.cos((baseAngles-9) * Math.PI / 180) * -90;
 	$('canvas').drawVector({
 		strokeStyle: DEFINE_STROKE_STYLE,
@@ -120,9 +126,9 @@ function drawOuterSingle(color, baseAngles, numberName) {
 		rounded: false,
 		closed: true,
 		x: startX, y: startY,
-		a1: baseAngles - 10, l1: 45,
+		a1: baseAngles -  9, l1: 45,
 		a2: baseAngles + 90, l2: 42,
-		a3: baseAngles + 187 , l3: 45
+		a3: baseAngles + 189 , l3: 45
 	});
 }
 
@@ -152,7 +158,7 @@ function drawDouble(color, baseAngles, numberName) {
  * トリプル描画
  */
 function drawTriple(color, baseAngles, numberName) {
-	var startX = DEFINE_CENTER_X + Math.sin((baseAngles-9) * Math.PI / 180) * 70;
+	var startX = DEFINE_CENTER_X + Math.sin((baseAngles-9) * Math.PI / 180) * 68;
 	var startY = DEFINE_CENTER_Y + Math.cos((baseAngles-9) * Math.PI / 180) * -70;
 	// Draw a closed path (making a triangle)
 	$('canvas').drawVector({
@@ -166,7 +172,7 @@ function drawTriple(color, baseAngles, numberName) {
 		x: startX, y: startY,
 		a1: baseAngles - 10, l1: 20,
 		a2: baseAngles + 90, l2: 28,
-		a3: baseAngles + 187 , l3: 20
+		a3: baseAngles + 189 , l3: 20
 	});
 
 }
@@ -179,7 +185,7 @@ function drawBull() {
 	$('canvas').drawArc({
 		strokeStyle: DEFINE_STROKE_STYLE,
 		strokeWidth: DEFINE_STROKE_WIDTH,
-		fillStyle: 'white',
+		fillStyle: DEFINE_MULTI_COLOR_RED,
 		name: "SB",
 		layer: true,
 		x: DEFINE_CENTER_X, y: DEFINE_CENTER_Y,
@@ -189,7 +195,7 @@ function drawBull() {
 	$('canvas').drawArc({
 		strokeStyle: DEFINE_STROKE_STYLE,
 		strokeWidth: DEFINE_STROKE_WIDTH,
-		fillStyle: 'white',
+		fillStyle: DEFINE_SINGLE_COLOR_BLACK,
 		name: "DB",
 		layer: true,
 		x: DEFINE_CENTER_X, y: DEFINE_CENTER_Y,
@@ -207,5 +213,14 @@ function drawText(text, x, y) {
 		text: text,
 		x: x, y: y,
 		maxWidth: 300
-	  });
+	});
 }
+
+$(function() {
+	// ボード描画
+	canvas_init();
+
+	$('canvas').getLayer("12IS").fillStyle = 'yellow';
+	// 再描画
+	$('canvas').drawLayers();
+});
