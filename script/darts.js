@@ -8,7 +8,7 @@
 var masterOutFlag = false;
 var doubleOutFlag = true;
 var singleOutFlag = false;
-var fatBullFlag = true;
+var fatBullFlag = false;
 var displayThrowDarts = false;
 // 変数
 var singleBullPoint = 50;
