@@ -82,13 +82,13 @@ function createArrangeTable() {
 	var tagTD = "";
 	var tagTR = "";
 	for (var i = 1; i<=10; i++) {
-		num = NUMBER_MAP[i];
+		num = DartsBoard.NUMBER_MAP[i];
 		tagTD = '<th>' + num + '</th>';
 		tagTD = tagTD + '<td id="' + num + 'S"></td>';
 		tagTD = tagTD + '<td id="' + num + 'D"></td>';
 		tagTD = tagTD + '<td id="' + num + 'T"></td>';
 		
-		num = NUMBER_MAP[i + 10];
+		num = DartsBoard.NUMBER_MAP[i + 10];
 		tagTD = tagTD + '<th>' + num + '</th>';
 		tagTD = tagTD + '<td id="' + num + 'S"></td>';
 		tagTD = tagTD + '<td id="' + num + 'D"></td>';
@@ -97,13 +97,13 @@ function createArrangeTable() {
 		tagTR = '<tr>'+tagTD+'</tr>';
 		$("#arrange_table").append(tagTR);
 	}
-	num = NUMBER_MAP[i];
+	num = DartsBoard.NUMBER_MAP[i];
 	tagTD = '<th>ー</th>';
 	tagTD = tagTD + '<td>ー</td>';
 	tagTD = tagTD + '<td>ー</td>';
 	tagTD = tagTD + '<td>ー</td>';
 		
-	num = NUMBER_MAP[i + 10];
+	num = DartsBoard.NUMBER_MAP[i + 10];
 	tagTD = tagTD + '<th>BULL</th>';
 	tagTD = tagTD + '<td id="SB"></td>';
 	tagTD = tagTD + '<td id="DB"></td>';
